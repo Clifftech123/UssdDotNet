@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using ussdDotNet.Extensions;
+using ussdDotNet.Menu;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +13,14 @@ var configuration = builder.Configuration;
 // Load configuration from appsettings.json
 configuration.AddJsonFile("appsettings.json");
 
-// Configure AppSettings and DbContext
+// Register AppSettings
 builder.Services.ConfigureAppSettings(configuration);
-builder.Services.ConfigureDbContext(configuration.GetConnectionString("USSDConnection"));
+
+// Register UssdMenu
+builder.Services.AddScoped<UssdMenu>();
+
+
+// Other service registrations...
 
 var app = builder.Build();
 

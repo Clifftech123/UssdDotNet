@@ -25,17 +25,19 @@ namespace ussdDotNet.Extensions
             services.AddSingleton(appSettings);
         }
 
+
         /// <summary>
         /// Configures the database context with the specified connection string.
         /// </summary>
         /// <param name="services">The service collection to add the database context to.</param>
         /// <param name="connectionString">The connection string to use for the database context.</param>
-        public static void ConfigureDbContext(this IServiceCollection services, string connectionString)
+        public static void ConfigureDbContext(this IServiceCollection services, AppSettings appSettings)
         {
             services.AddDbContext<UssdDBAppContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(appSettings.USSDConnection);
             });
         }
+
     }
 }

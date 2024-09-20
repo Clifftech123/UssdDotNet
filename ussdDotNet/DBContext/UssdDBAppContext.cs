@@ -13,7 +13,8 @@ namespace ussdDotNet.DBContext
             _appSettings = appSettings;
         }
 
-        public DbSet<UssdSession> UssdSessions { get; set; }
+
+        public virtual DbSet<UssdSession> UssdSessions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
