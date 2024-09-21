@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ussdDotNet.Contracts;
-using ussdDotNet.DBContext;
 
 namespace ussdDotNet.Extensions
 {
@@ -26,18 +25,7 @@ namespace ussdDotNet.Extensions
         }
 
 
-        /// <summary>
-        /// Configures the database context with the specified connection string.
-        /// </summary>
-        /// <param name="services">The service collection to add the database context to.</param>
-        /// <param name="connectionString">The connection string to use for the database context.</param>
-        public static void ConfigureDbContext(this IServiceCollection services, AppSettings appSettings)
-        {
-            services.AddDbContext<UssdDBAppContext>(options =>
-            {
-                options.UseSqlServer(appSettings.USSDConnection);
-            });
-        }
+
 
     }
 }

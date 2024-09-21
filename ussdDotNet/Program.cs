@@ -10,11 +10,14 @@ builder.Services.AddSwaggerGen();
 
 var configuration = builder.Configuration;
 
-// Load configuration from appsettings.json
-configuration.AddJsonFile("appsettings.json");
+
+
 
 // Register AppSettings
 builder.Services.ConfigureAppSettings(configuration);
+
+// Register DbContext
+
 
 // Register UssdMenu
 builder.Services.AddScoped<UssdMenu>();

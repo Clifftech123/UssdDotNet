@@ -10,10 +10,14 @@ namespace ussdDotNet.Menu
     {
         private readonly ILogger<UssdMenu> _logger;
 
-        public UssdMenu(ILogger<UssdMenu> logger)
+        private readonly AppSettings _appSettings;
+
+        public UssdMenu(ILogger<UssdMenu> logger, AppSettings appSettings)
         {
             _logger = logger;
+            _appSettings = appSettings;
         }
+
 
         /// <summary>
         /// Processes the USSD response based on the user's input and session state.
@@ -29,8 +33,8 @@ namespace ussdDotNet.Menu
             var response = new UssdResponse();
 
             var options = new DbContextOptions<UssdDBAppContext>();
-            var appSettings = new AppSettings();
-            var context = new UssdDBAppContext(options, appSettings);
+
+            using var context = new UssdDBAppContext(options, _appSettings);
 
             if (requestType.Equals("initiation", StringComparison.OrdinalIgnoreCase))
             {
@@ -46,7 +50,7 @@ namespace ussdDotNet.Menu
                     response.Message += "4. Exit\n";
                     response.Type = "Response";
 
-                    UssdSession.SaveSession(context as IServiceProvider, requestType, sessionId, mobileNumber, network, message, "initiation", null);
+                    UssdSession.SaveSession(context, _appSettings, requestType, sessionId, mobileNumber, network, message, "initiation", null);
 
                     return response;
                 }
@@ -76,7 +80,7 @@ namespace ussdDotNet.Menu
                     response.Message = "Enter your first name\n";
                     response.Type = "Response";
 
-                    UssdSession.SaveSession(context as IServiceProvider, requestType, sessionId, mobileNumber, network, message, "Register", null);
+                    UssdSession.SaveSession(context, _appSettings, requestType, sessionId, mobileNumber, network, message, "Register", null);
                     return response;
                 }
                 // Deposit menu
@@ -87,7 +91,7 @@ namespace ussdDotNet.Menu
                     response.Message = "Enter amount to deposit\n";
                     response.Type = "Response";
 
-                    UssdSession.SaveSession(context as IServiceProvider, requestType, sessionId, mobileNumber, network, message, "Deposit", null);
+                    UssdSession.SaveSession(context, _appSettings, requestType, sessionId, mobileNumber, network, message, "Deposit", null);
                     return response;
                 }
                 // Withdraw menu
@@ -98,7 +102,7 @@ namespace ussdDotNet.Menu
                     response.Message = "Enter withdrawal amount\n";
                     response.Type = "Response";
 
-                    UssdSession.SaveSession(context as IServiceProvider, requestType, sessionId, mobileNumber, network, message, "Withdraw", null);
+                    UssdSession.SaveSession(context, _appSettings, requestType, sessionId, mobileNumber, network, message, "Withdraw", null);
                     return response;
                 }
 
@@ -119,7 +123,7 @@ namespace ussdDotNet.Menu
                     response.Message = "Enter your last name\n";
                     response.Type = "Response";
 
-                    UssdSession.SaveSession(context as IServiceProvider, requestType, sessionId, mobileNumber, network, message, "Register.Firstname", null);
+                    UssdSession.SaveSession(context, _appSettings, requestType, sessionId, mobileNumber, network, message, "Register.Firstname", null);
                     return response;
                 }
 
@@ -136,7 +140,7 @@ namespace ussdDotNet.Menu
                     response.Message += $"2: Cancel\n";
                     response.Type = "Response";
 
-                    UssdSession.SaveSession(context as IServiceProvider, requestType, sessionId, mobileNumber, network, message, "Register.Lastname", null);
+                    UssdSession.SaveSession(context, _appSettings, requestType, sessionId, mobileNumber, network, message, "Register.Lastname", null);
                     return response;
                 }
                 else if (lastSession.Tag.Equals("Register.Lastname", StringComparison.OrdinalIgnoreCase))
@@ -148,7 +152,7 @@ namespace ussdDotNet.Menu
                     response.Message = "Registration successful\n";
                     response.Type = "Release";
 
-                    UssdSession.SaveSession(context as IServiceProvider, requestType, sessionId, mobileNumber, network, message, "Register.Complete", null);
+                    UssdSession.SaveSession(context, _appSettings, requestType, sessionId, mobileNumber, network, message, "Register.Complete", null);
                     return response;
                 }
             }
